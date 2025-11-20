@@ -18,16 +18,15 @@ FPTS_PROXY = os.getenv('FPTS_PROXY')
 LOG_FOLDER = os.getenv('LOG_FOLDER')
 
 NOTI_EMAIL = os.getenv('NOTI_EMAIL')
-# RECEIPENTS = os.getenv('RECEIPENTS')
-RECEIPENTS = 'nguyengiahongduc@gmail.com, DucNGH@fpts.com.vn, TungTNA@fpts.com.vn'
+RECEIPENTS = os.getenv('RECEIPENTS')
+# RECEIPENTS = 'nguyengiahongduc@gmail.com, DucNGH@fpts.com.vn, TungTNA@fpts.com.vn'
 
 url = os.getenv('OMO_URL')
 file_path = os.path.join(DATA_FOLDER, FILE_NAME)
-
-
 log_file = os.path.join(LOG_FOLDER, "omo-crawler.log")
 
-# lOGGER
+
+# Logger
 logger = workflow_logger(
     name='omo-crawler',
     log_file=log_file

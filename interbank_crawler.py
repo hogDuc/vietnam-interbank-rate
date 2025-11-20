@@ -71,7 +71,9 @@ if current_date > latest_date:
         updated_data.to_excel(file_path, index=False)
 
         logger.info(f"Successfully updated data for {current_date.date()}...")
-        html_res = today_rate.to_html(index=False, border=1)
+        html_res = today_rate.assign(
+            value = lambda df: df['value'] / 1_000_000_000
+        ).rename(columns={'value':'value (bil. VND)'}).to_html(index=False, border=1)
 
         # Send notification email
         send_email(
