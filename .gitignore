@@ -1,0 +1,7 @@
+__pycache__
+chrome-win64
+chromedriver-win64
+ignore
+.env
+*.ipynb
+creds
