@@ -70,19 +70,26 @@ if current_date > latest_date:
         updated_data = pd.concat([old_data, today_rate])
         updated_data.to_excel(file_path, index=False)
 
-        logger.info(f"Successfully updated data for {current_date.date()}...")
+        logger.info(f"Successfully updated data for {current_date.date()}")
+
+        # Format table for email
         html_res = today_rate.assign(
             value = lambda df: df['value'] / 1_000_000_000
-        ).rename(columns={'value':'value (bil. VND)'}).to_html(index=False, border=1)
+        ).rename(columns={
+            'date':'Ngày',
+            'maturity':'Kỳ hạn',
+            'interbank_rate':'Lãi suất',
+            'value':'Doanh số (tỷ đồng)'
+        }).to_html(index=False, border=1)
 
         # Send notification email
         send_email(
             sender=NOTI_EMAIL,
             receiver=RECEIPENTS,
-            subject=f"Interbank rate report | {current_date.date()}",
+            subject=f"Lãi suất thị trường liên ngân hàng ngày {current_date.date()}",
             body=f"""
             <html><body>
-                <h3>Crawler Report for {current_date.date()}</h3>
+                <h3>Báo cáo lãi suất thị trường liên ngân hàng | {current_date.date()}</h3>
                 {html_res}
             </body></html>
             """

@@ -83,17 +83,29 @@ if current_date > last_crawl:
         omo_table['date'] = current_date.strftime('%Y-%m-%d')
         omo_table['interest'] = omo_table['interest'] / 100
 
+
         updated_data = pd.concat([old_data, omo_table])
         updated_data.to_excel(file_path, index=False)
+
+        # Format table for email
+        html_table = omo_table[['date', 'side', 'maturity', 'participants', 'complete', 'volume', 'interest']].rename(columns={
+            'date':'Ngày',
+            'side':"Loại hình giao dịch",
+            'maturity':'Kỳ hạn',
+            'participants':'Số thành viên tham gia',
+            'complete':'Số thành viên trúng thầu',
+            'volume':'Khối lượng trúng thầu (Tỷ đồng)',
+            'interest':'Lãi suất trúng thầu'
+        }).to_html(index=False, border=1)
 
         send_email(
             sender=NOTI_EMAIL,
             receiver=RECEIPENTS,
-            subject=f"Interbank rate report | {current_date.date()}",
+            subject=f"Nghiệp vụ thị trường mở ngày {current_date.date()}",
             body=f"""
             <html><body>
-                <h3>Open Market Operation | {current_date.date()}</h3>
-                {omo_table.to_html(index=False, border=1)}
+                <h3>Báo cáo nghiệp vụ OMO | {current_date.date()}</h3>
+                {html_table}
             </body></html>
             """
         )
